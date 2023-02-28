@@ -3,122 +3,28 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script>
-  class PhElement extends HTMLElement {
-    constructor() {
-      super();
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-      var root = this.createShadowRoot();
-      root.appendChild(this.constructor.template.content.cloneNode(true));
-    }
-
-    connectedCallback() {}
-
-    disconnectedCallback() {}
-
-    attributeChangedCallback(attr, oldValue, newValue) {
-      if (attr in this) {
-        this[attr] = newValue;
-      }
-    }
-
-    adoptedCallback(oldDocument, newDocument) {}
-
-    /** Execute querySelector against this node's shadowRoot. */
-    sq(query) {
-      return this.shadowRoot.querySelector(query);
-    }
-
-    /** Execute querySelectorAll against this node's shadowRoot. */
-    sqa(query) {
-      return this.shadowRoot.querySelectorAll(query);
-    }
-
-    get templateElement() {
-      return this.constructor.template;
-    }
-  }
-
-  {
-    var head = document.querySelector('head');
-
-    function titleCase(s) {
-      return s && s[0].toUpperCase() + s.slice(1);
-    }
-
-    function nameToClassName(name) {
-      return name.split('-').map(titleCase).join('');
-    }
-
-    function classFromClassName(className) {
-      try {
-        return eval(className);
-      } catch (e) {
-        return undefined;
-      }
-    }
-
-    function appendScript(script) {
-      var scriptNode = document.createElement('script');
-      scriptNode.innerHTML = script;
-      head.appendChild(scriptNode);
-    }
-
-    function loadComponents(root) {
-      root.querySelectorAll('template').forEach(template => {
-        var tagName = template.getAttribute('name');
-        if (!tagName) {
-          return;
-        }
-
-        var className = nameToClassName(tagName);
-
-        var mainScript = template.content.querySelector('script');
-        if (mainScript) {
-          head.appendChild(document.importNode(mainScript, true));
-          mainScript.parentNode.removeChild(mainScript);
-        }
-
-        var customClass = classFromClassName(className);
-        if (!customClass) {
-          appendScript('class ' + className + ' extends PhElement {}');
-          customClass = classFromClassName(className);
-        }
-
-        customClass.tagName = tagName;
-        customClass.template = document.importNode(template, true);
-        customElements.define(tagName, customClass);
-      });
-    }
-
-    var linkObserver = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
-        mutation.addedNodes && mutation.addedNodes.forEach(node => {
-          if (node.nodeName == 'LINK' && node.getAttribute('rel') == 'import') {
-            node.addEventListener('load', e => {
-              e.target.import.querySelectorAll('ph-components').forEach(loadComponents);
-            });
-          }
-        });
-      });
-    });
-
-    linkObserver.observe(head, {childList: true});
-  }
-  </script>
-
-  <title>[Site Name]: home</title>
+  <title>[Site Title]</title>
   <meta name="description" content="[Site Description]">
   <meta name="author" content="[Author]">
 
+  <meta property="og:title" content="[Site Title]">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="[Site URL]">
+  <meta property="og:description" content="[Site Description]">
+  <meta property="og:image" content="/images/snippet.png">
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
   <link rel="stylesheet" href="css/style.css?v=1.0">
 
-  <!--[if lt IE 9]>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
 </head>
 
 <body>
+  <!-- your content here... -->
   <script src="js/main.js"></script>
 </body>
 </html>
